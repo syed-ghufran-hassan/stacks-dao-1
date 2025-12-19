@@ -28,8 +28,9 @@
 (define-constant TIMELOCK u100)
 (define-constant ADAPTER .transfer-adapter-v1)
 ;; Governance token contract - to be set during deployment
-;; For now using a placeholder; should be replaced with actual token principal
-(define-constant GOVERNANCE_TOKEN .ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)
+;; TODO: Replace with actual governance token contract principal
+;; For now using a placeholder contract name; should be configured before deployment
+(define-constant GOVERNANCE_TOKEN .governance-token-v1)
 
 (define-data-var next-proposal-id uint u1)
 

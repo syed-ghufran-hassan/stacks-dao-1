@@ -69,14 +69,14 @@ plan:
             path: contracts/traits/dao-adapter.trait
             clarity-version: 4
         - emulated-contract-publish:
-            contract-name: dao-treasury-v1
-            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: contracts/dao-treasury.clar
-            clarity-version: 4
-        - emulated-contract-publish:
             contract-name: token-trait-v1
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/traits/token.trait
+            clarity-version: 4
+        - emulated-contract-publish:
+            contract-name: dao-treasury-v1
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/dao-treasury.clar
             clarity-version: 4
         - emulated-contract-publish:
             contract-name: transfer-adapter-v1
