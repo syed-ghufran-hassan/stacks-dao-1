@@ -248,11 +248,13 @@
   (let (
     (pid (try! (validate-proposal-id proposal-id)))
     (proposal (try! (get-proposal! pid)))
+    (snapshot-supply (get snapshot-supply proposal))
+    (threshold (proposal-threshold snapshot-supply))
   )
     (if (get cancelled proposal)
       (err ERR_ALREADY_CANCELLED)
-      (if (< u1 (proposal-threshold (get snapshot-supply proposal)))
-        (err ERR_INSUFFICIENT_POWER)
+      (if (is-eq tx-sender (get proposer proposal))
+        ;; Proposer can always cancel
         (begin
           (map-set proposals { id: pid }
             {
@@ -267,7 +269,29 @@
               abstain-votes: (get abstain-votes proposal),
               executed: (get executed proposal),
               cancelled: true,
-              snapshot-supply: (get snapshot-supply proposal),
+              snapshot-supply: snapshot-supply,
               adapter-hash: (get adapter-hash proposal)
             })
-          (ok true))))))
+          (ok true))
+        ;; Non-proposer must have threshold power
+        (let ((caller-balance (try! (get-token-balance tx-sender))))
+          (if (< caller-balance threshold)
+            (err ERR_INSUFFICIENT_POWER)
+            (begin
+              (map-set proposals { id: pid }
+                {
+                  proposer: (get proposer proposal),
+                  adapter: ADAPTER,
+                  payload: (get payload proposal),
+                  start-height: (get start-height proposal),
+                  end-height: (get end-height proposal),
+                  eta: (get eta proposal),
+                  for-votes: (get for-votes proposal),
+                  against-votes: (get against-votes proposal),
+                  abstain-votes: (get abstain-votes proposal),
+                  executed: (get executed proposal),
+                  cancelled: true,
+                  snapshot-supply: snapshot-supply,
+                  adapter-hash: (get adapter-hash proposal)
+                })
+              (ok true))))))))
