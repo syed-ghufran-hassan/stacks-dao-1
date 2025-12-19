@@ -1,6 +1,7 @@
-;; DAO core logic using a single adapter and simple tokenless voting (1 vote per wallet).
+;; DAO core logic using token-based voting (1 token = 1 vote).
 
 (use-trait dao-adapter-trait .dao-adapter-v1.dao-adapter-trait)
+(use-trait ft-trait .token-trait-v1.ft-trait)
 
 (define-constant ERR_PROPOSAL_MISSING u102)
 (define-constant ERR_VOTING_CLOSED u104)
@@ -26,6 +27,9 @@
 (define-constant VOTING_PERIOD u2100)
 (define-constant TIMELOCK u100)
 (define-constant ADAPTER .transfer-adapter-v1)
+;; Governance token contract - to be set during deployment
+;; For now using a placeholder; should be replaced with actual token principal
+(define-constant GOVERNANCE_TOKEN .ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)
 
 (define-data-var next-proposal-id uint u1)
 
