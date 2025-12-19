@@ -66,6 +66,22 @@
   (/ (* supply QUORUM_PERCENT) ONE_HUNDRED)
 )
 
+;; Get the governance token balance for a given principal
+(define-private (get-token-balance (owner principal))
+  (match (contract-call? GOVERNANCE_TOKEN balance-of owner)
+    balance (ok balance)
+    error-code (err error-code)
+  )
+)
+
+;; Get the total supply of the governance token
+(define-private (get-token-total-supply)
+  (match (contract-call? GOVERNANCE_TOKEN total-supply)
+    supply (ok supply)
+    error-code (err error-code)
+  )
+)
+
 (define-private (validate-proposal-id (proposal-id uint))
   (if (and (>= proposal-id u1) (< proposal-id (var-get next-proposal-id)))
     (ok proposal-id)
