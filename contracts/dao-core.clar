@@ -95,11 +95,12 @@
 (define-public (propose (payload (tuple (kind (string-ascii 32)) (amount uint) (recipient principal) (token (optional principal)) (memo (optional (buff 34))))))
   (let (
     (pid (var-get next-proposal-id))
-    (supply ASSUMED_TOTAL_SUPPLY)
+    (supply (try! (get-token-total-supply)))
     (adapter-hash (try! (contract-hash? ADAPTER)))
-    (threshold (proposal-threshold ASSUMED_TOTAL_SUPPLY))
+    (threshold (proposal-threshold supply))
+    (proposer-balance (try! (get-token-balance tx-sender)))
   )
-    (if (< u1 threshold)
+    (if (< proposer-balance threshold)
       (err ERR_INSUFFICIENT_POWER)
       (if (is-eq (get kind payload) "stx-transfer")
         (begin
