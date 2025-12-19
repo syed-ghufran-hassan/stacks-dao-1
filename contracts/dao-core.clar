@@ -135,11 +135,12 @@
           (if (is-some (map-get? receipts { id: proposal-id, voter: tx-sender }))
             (err ERR_ALREADY_VOTED)
             (let (
-              (for-delta (if (is-eq choice CHOICE_FOR) u1 u0))
-              (against-delta (if (is-eq choice CHOICE_AGAINST) u1 u0))
-              (abstain-delta (if (is-eq choice CHOICE_ABSTAIN) u1 u0))
+              (voter-balance (try! (get-token-balance tx-sender)))
+              (for-delta (if (is-eq choice CHOICE_FOR) voter-balance u0))
+              (against-delta (if (is-eq choice CHOICE_AGAINST) voter-balance u0))
+              (abstain-delta (if (is-eq choice CHOICE_ABSTAIN) voter-balance u0))
             )
-              (map-set receipts { id: proposal-id, voter: tx-sender } { choice: choice, weight: u1 })
+              (map-set receipts { id: proposal-id, voter: tx-sender } { choice: choice, weight: voter-balance })
               (map-set proposals { id: proposal-id }
                 {
                   proposer: (get proposer proposal),
